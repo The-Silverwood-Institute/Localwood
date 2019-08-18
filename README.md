@@ -4,7 +4,7 @@ Control Energenie smart sockets via a Raspberry Pi using a web interface or API.
 
 Adapted from: https://energenie4u.co.uk/res/pdfs/ENER314%20UM.pdf
 
-## Requiements
+## Requirements
 
 - Python 3
 - Raspberry Pi (I used a Zero W)
