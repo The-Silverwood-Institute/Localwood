@@ -24,8 +24,20 @@ class sockets:
         if not hasattr(params, 'state'):
             raise web.badrequest('Missing URL param "state"')
 
-        if params.socket == '1' and params.state == 'on':
+        if params.socket == 'all' and params.state == 'on':
             # See: https://energenie4u.co.uk/res/pdfs/ENER314%20UM.pdf
+            print("sending code 1011 all sockets on")
+            GPIO.output (11, True)
+            GPIO.output (15, True)
+            GPIO.output (16, False)
+            GPIO.output (13, True)
+        elif params.socket == 'all' and params.state == 'off':
+            print("sending code 0011 all sockets off")
+            GPIO.output (11, True)
+            GPIO.output (15, True)
+            GPIO.output (16, False)
+            GPIO.output (13, False)
+        elif params.socket == '1' and params.state == 'on':
             print("sending code 1111 socket 1 on")
             GPIO.output (11, True)
             GPIO.output (15, True)
@@ -49,9 +61,33 @@ class sockets:
             GPIO.output (15, True)
             GPIO.output (16, True)
             GPIO.output (13, False)
+        elif params.socket == '3' and params.state == 'on':
+            print("sending code 1101 socket 3 on")
+            GPIO.output (11, True)
+            GPIO.output (15, False)
+            GPIO.output (16, True)
+            GPIO.output (13, True)
+        elif params.socket == '3' and params.state == 'off':
+            print("sending code 0101 socket 3 off")
+            GPIO.output (11, True)
+            GPIO.output (15, False)
+            GPIO.output (16, True)
+            GPIO.output (13, False)
+        elif params.socket == '4' and params.state == 'on':
+            print("sending code 1100 socket 4 on")
+            GPIO.output (11, False)
+            GPIO.output (15, False)
+            GPIO.output (16, True)
+            GPIO.output (13, True)
+        elif params.socket == '4' and params.state == 'off':
+            print("sending code 0100 socket 4 off")
+            GPIO.output (11, False)
+            GPIO.output (15, False)
+            GPIO.output (16, True)
+            GPIO.output (13, False)
         else:
             print('Unknown combo socket={} state={}'.format(params.socket, params.state))
-            raise web.badrequest('Socket or state invalid (expects socket: 1-2 state: on/off)')
+            raise web.badrequest('Socket or state invalid (expects socket: 1-4 state: on/off)')
 
         # let it settle, encoder requires this
         time.sleep(0.1)
