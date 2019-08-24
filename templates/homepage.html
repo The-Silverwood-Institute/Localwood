@@ -2,32 +2,45 @@
 <html lang="en">
   <head>
     <title>Localwood Socket Control</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <style>
-      em {
-        display: block;
-      }
-    </style>
+    <link rel="stylesheet" href="static/bootstrap.min.css" />
+    <link rel="stylesheet" href="static/styles.css" />
   </head>
   <body>
-    <h1>Socket Control</h1>
-    <h4>All Sockets</h4>
-    <button socket="all" state="on">On</button>
-    <button socket="all" state="off">Off</button>
-    <h4>Socket 1</h4>
-    <button socket="1" state="on">On</button>
-    <button socket="1" state="off">Off</button>
-    <h4>Socket 2</h4>
-    <button socket="2" state="on">On</button>
-    <button socket="2" state="off">Off</button>
-    <h4>Socket 3</h4>
-    <button socket="3" state="on">On</button>
-    <button socket="3" state="off">Off</button>
-    <h4>Socket 4</h4>
-    <button socket="4" state="on">On</button>
-    <button socket="4" state="off">Off</button>
-    <div id="status"></div>
+      <div class="container">
+      <h1>Socket Control</h1>
+
+      <h4>All Sockets</h4>
+      <div class="btn-group btn-group-lg text-center" role="group" aria-label="All sockets control">
+        <button type="button" class="btn btn-light" socket="all" state="on">On</button>
+        <button type="button" class="btn btn-light" socket="all" state="off">Off</button>
+      </div>
+      <h4>Socket 1</h4>
+      <div class="btn-group btn-group-lg" role="group" aria-label="Socket 1 control">
+        <button type="button" class="btn btn-light" socket="1" state="on">On</button>
+        <button type="button" class="btn btn-light" socket="1" state="off">Off</button>
+      </div>
+      <h4>Socket 2</h4>
+      <div class="btn-group btn-group-lg" role="group" aria-label="Socket 2 control">
+        <button type="button" class="btn btn-light" socket="2" state="on">On</button>
+        <button type="button" class="btn btn-light" socket="2" state="off">Off</button>
+      </div>
+      <h4>Socket 3</h4>
+      <div class="btn-group btn-group-lg" role="group" aria-label="Socket 3 control">
+        <button type="button" class="btn btn-light" socket="3" state="on">On</button>
+        <button type="button" class="btn btn-light" socket="3" state="off">Off</button>
+      </div>
+      <h4>Socket 4</h4>
+      <div class="btn-group btn-group-lg" role="group" aria-label="Socket 4 control">
+        <button type="button" class="btn btn-light" socket="4" state="on">On</button>
+        <button type="button" class="btn btn-light" socket="4" state="off">Off</button>
+      </div>
+
+      <h5>Status</h5>
+      <div id="status"></div>
+    </div>
 
     <script src="static/scripts.js" type="text/javascript"></script>
   </body>

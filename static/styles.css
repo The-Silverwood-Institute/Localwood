@@ -1,0 +1,28 @@
+body {
+  color: #EDEDED;
+  background-color: #1C2329;
+  text-align: center;
+}
+
+div.btn-group {
+  margin: auto;
+}
+
+h4 {
+  margin-top: .5rem;
+}
+
+h5 {
+  margin-top: 1rem;
+}
+
+#status {
+  max-width: 30rem;
+  margin: auto;
+  background-color: #252F38;
+  border-radius: 0.2em;
+}
+
+em {
+  display: block;
+}
