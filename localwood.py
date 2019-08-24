@@ -1,7 +1,13 @@
+import os
 import web
 import RPi.GPIO as GPIO
 import time
 import socket_setup
+
+auth_token = os.environ.get('AUTH_TOKEN')
+
+if not auth_token:
+    print("Proceeding without authentication")
 
 urls = (
     '/', 'homepage',
@@ -10,13 +16,25 @@ urls = (
 render = web.template.render('templates/')
 app = web.application(urls, globals())
 
+def authenticate_user(params):
+    if auth_token:
+        if not hasattr(params, 'token'):
+            raise web.badrequest('Missing URL param "token"')
+
+        if params.token != auth_token:
+            raise web.badrequest('Invalid auth token')
+
 class homepage:
     def GET(self):
+        authenticate_user(web.input())
+
         return render.homepage()
 
 class sockets:
     def POST(self):
         params = web.input()
+
+        authenticate_user(params)
 
         if not hasattr(params, 'socket'):
             raise web.badrequest('Missing URL param "socket"')
