@@ -16,4 +16,6 @@ document.querySelectorAll('button').forEach(button => button.addEventListener('c
   fetch(url, {method: 'POST'})
     .then(response => addStatus(response.statusText))
     .catch(e => addStatus('Error: ' + e));
+
+  button.blur();
 }));
