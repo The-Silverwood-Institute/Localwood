@@ -1,8 +1,11 @@
 #import the required modules
 import RPi.GPIO as GPIO
+import logging
 
 def setup():
-    print('Setting up socket control chip')
+    logging.info('Setting up socket control chip')
+
+    GPIO.setwarnings(False)
 
     # set the pins numbering mode
     GPIO.setmode(GPIO.BOARD)

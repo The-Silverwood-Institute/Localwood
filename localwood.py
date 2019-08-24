@@ -3,11 +3,14 @@ import web
 import RPi.GPIO as GPIO
 import time
 import socket_setup
+import logging
+
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
 auth_token = os.environ.get('AUTH_TOKEN')
 
 if not auth_token:
-    print("Proceeding without authentication")
+    logging.warn("Proceeding without authentication")
 
 urls = (
     '/', 'homepage',
@@ -44,67 +47,67 @@ class sockets:
 
         if params.socket == 'all' and params.state == 'on':
             # See: https://energenie4u.co.uk/res/pdfs/ENER314%20UM.pdf
-            print("sending code 1011 all sockets on")
+            logging.info("Sending code 1011 all sockets on")
             GPIO.output (13, True)
             GPIO.output (16, False)
             GPIO.output (15, True)
             GPIO.output (11, True)
         elif params.socket == 'all' and params.state == 'off':
-            print("sending code 0011 all sockets off")
+            logging.info("Sending code 0011 all sockets off")
             GPIO.output (13, False)
             GPIO.output (16, False)
             GPIO.output (15, True)
             GPIO.output (11, True)
         elif params.socket == '1' and params.state == 'on':
-            print("sending code 1111 socket 1 on")
+            logging.info("Sending code 1111 socket 1 on")
             GPIO.output (13, True)
             GPIO.output (16, True)
             GPIO.output (15, True)
             GPIO.output (11, True)
         elif params.socket == '1' and params.state == 'off':
-            print("sending code 0111 socket 1 off")
+            logging.info("Sending code 0111 socket 1 off")
             GPIO.output (13, False)
             GPIO.output (16, True)
             GPIO.output (15, True)
             GPIO.output (11, True)
         elif params.socket == '2' and params.state == 'on':
-            print("sending code 1110 socket 2 on")
+            logging.info("Sending code 1110 socket 2 on")
             GPIO.output (13, True)
             GPIO.output (16, True)
             GPIO.output (15, True)
             GPIO.output (11, False)
         elif params.socket == '2' and params.state == 'off':
-            print("sending code 0110 socket 2 off")
+            logging.info("Sending code 0110 socket 2 off")
             GPIO.output (13, False)
             GPIO.output (16, True)
             GPIO.output (15, True)
             GPIO.output (11, False)
         elif params.socket == '3' and params.state == 'on':
-            print("sending code 1101 socket 3 on")
+            logging.info("Sending code 1101 socket 3 on")
             GPIO.output (13, True)
             GPIO.output (16, True)
             GPIO.output (15, False)
             GPIO.output (11, True)
         elif params.socket == '3' and params.state == 'off':
-            print("sending code 0101 socket 3 off")
+            logging.info("Sending code 0101 socket 3 off")
             GPIO.output (13, False)
             GPIO.output (16, True)
             GPIO.output (15, False)
             GPIO.output (11, True)
         elif params.socket == '4' and params.state == 'on':
-            print("sending code 1100 socket 4 on")
+            logging.info("Sending code 1100 socket 4 on")
             GPIO.output (13, True)
             GPIO.output (16, True)
             GPIO.output (15, False)
             GPIO.output (11, False)
         elif params.socket == '4' and params.state == 'off':
-            print("sending code 0100 socket 4 off")
+            logging.info("Sending code 0100 socket 4 off")
             GPIO.output (13, False)
             GPIO.output (16, True)
             GPIO.output (15, False)
             GPIO.output (11, False)
         else:
-            print('Unknown combo socket={} state={}'.format(params.socket, params.state))
+            logging.info('Unknown combo socket=%s state=%s', params.socket, params.state)
             raise web.badrequest('Socket or state invalid (expects socket: 1-4 state: on/off)')
 
         # let it settle, encoder requires this
@@ -112,7 +115,7 @@ class sockets:
         # Enable the modulator
         GPIO.output (22, True)
         # keep enabled for a period
-        time.sleep(1)
+        time.sleep(0.5)
         # Disable the modulator
         GPIO.output (22, False)
 
