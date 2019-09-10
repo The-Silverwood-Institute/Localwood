@@ -115,7 +115,7 @@ class sockets:
         # Enable the modulator
         GPIO.output (22, True)
         # keep enabled for a period
-        time.sleep(0.5)
+        time.sleep(1)
         # Disable the modulator
         GPIO.output (22, False)
 
