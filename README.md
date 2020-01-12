@@ -16,6 +16,15 @@ Adapted from: https://energenie4u.co.uk/res/pdfs/ENER314%20UM.pdf
 1. Run server with: `python3 localwood.py`
 2. Use web UI: http://localhost:8080
 
+You can customise the socket names in the web interface using these environment variables:
+
+```
+SOCKET_1_LABEL="Desk lamp"
+SOCKET_2_LABEL="Fairy Lights"
+SOCKET_3_LABEL="Fan"
+SOCKET_4_LABEL="Speakers"
+```
+
 ## Problems?
 
 If you have problems or questions feel free to [open an issue](https://github.com/The-Silverwood-Institute/Localwood/issues/new)

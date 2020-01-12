@@ -31,7 +31,12 @@ class homepage:
     def GET(self):
         authenticate_user(web.input())
 
-        return render.homepage()
+        return render.homepage(
+            os.environ.get('SOCKET_1_LABEL', "Socket 1"),
+            os.environ.get('SOCKET_2_LABEL', "Socket 2"),
+            os.environ.get('SOCKET_3_LABEL', "Socket 3"),
+            os.environ.get('SOCKET_4_LABEL', "Socket 4")
+        )
 
 class sockets:
     def POST(self):
