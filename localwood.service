@@ -1,0 +1,19 @@
+[Unit]
+Description=Manage smart sockets
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 -u /home/pi/Projects/Localwood/localwood.py
+Environment="AUTH_TOKEN=supersecrettokenhere"
+Environment="SOCKET_1_LABEL=Fairy Lights"
+Environment="SOCKET_2_LABEL=Roundel"
+Environment="SOCKET_3_LABEL=Oval"
+Environment="SOCKET_4_LABEL=Hogwarts"
+WorkingDirectory=/home/pi/Projects/Localwood
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
