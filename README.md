@@ -31,6 +31,10 @@ I'd recommend running this on the Pi as a [systemd service](https://www.raspberr
 
 For accessing outside the house (e.g. with the Google Assistant) you can use IFTTT and ngrok. Alternatively you can use MQTT by running [this adaptor](https://github.com/The-Silverwood-Institute/Adorable-QTPI) to turn MQTT messages into Localwood API calls.
 
+Soldering a 433MHz antenna to the Energenie control board can dramatically improve performance:
+
+![Photograph of a Raspberry Pi with an attached Energenie Pi-mote control board and a small copper antenna soldered to the board](pi.jpg)
+
 ## Problems?
 
 If you have problems or questions feel free to [open an issue](https://github.com/The-Silverwood-Institute/Localwood/issues/new). Pull requests always welcome :smile_cat:
