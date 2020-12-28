@@ -12,6 +12,9 @@ auth_token = os.environ.get('AUTH_TOKEN')
 if not auth_token:
     logging.warn("Proceeding without authentication")
 
+if not any(os.environ.get(key) for key in ['SOCKET_1_LABEL', 'SOCKET_2_LABEL', 'SOCKET_3_LABEL', 'SOCKET_4_LABEL']):
+    raise ValueError("No power sockets enabled, missing envs e.g. SOCKET_1_LABEL")
+
 urls = (
     '/', 'homepage',
     '/sockets', 'sockets'
