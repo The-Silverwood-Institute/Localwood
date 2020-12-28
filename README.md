@@ -29,7 +29,7 @@ You can also customise the page's heading with `PAGE_HEADING` and the web browse
 
 ## Recommendations
 
-I'd recommend running this on the Pi as a [systemd service](https://www.raspberrypi.org/documentation/linux/usage/systemd.md), so it boots with the Pi. Here's [my systemd config](localwood.service) to get you started.
+I'd recommend running this on the Pi as a [systemd service](https://www.raspberrypi.org/documentation/linux/usage/systemd.md), so it boots with the Pi. Here's [my systemd config](localwood.service) to get you started. If the systemd service fails to start use `journalctl -u localwood.service -n 40` to get the program's logs.
 
 For accessing outside the house (e.g. with the Google Assistant) you can use IFTTT and ngrok. Alternatively you can use MQTT by running [this adaptor](https://github.com/The-Silverwood-Institute/Adorable-QTPI) to turn MQTT messages into Localwood API calls.
 
