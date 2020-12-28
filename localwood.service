@@ -5,6 +5,8 @@ After=network.target
 [Service]
 ExecStart=/usr/bin/python3 -u /home/pi/Projects/Localwood/localwood.py
 Environment="AUTH_TOKEN=supersecrettokenhere"
+Environment="PAGE_TITLE=Bedroom Lights - Localwood"
+Environment="PAGE_HEADING=Bedroom Lights"
 Environment="SOCKET_1_LABEL=Fairy Lights"
 Environment="SOCKET_2_LABEL=Roundel"
 Environment="SOCKET_3_LABEL=Oval"

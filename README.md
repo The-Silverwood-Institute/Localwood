@@ -25,6 +25,8 @@ SOCKET_3_LABEL="Fan"
 SOCKET_4_LABEL="Speakers"
 ```
 
+You can also customise the page's heading with `PAGE_HEADING` and the web browser's tab title with `PAGE_TITLE`
+
 ## Recommendations
 
 I'd recommend running this on the Pi as a [systemd service](https://www.raspberrypi.org/documentation/linux/usage/systemd.md), so it boots with the Pi. Here's [my systemd config](localwood.service) to get you started.

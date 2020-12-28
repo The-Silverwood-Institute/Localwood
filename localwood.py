@@ -32,6 +32,8 @@ class homepage:
         authenticate_user(web.input())
 
         return render.homepage(
+            os.environ.get('PAGE_TITLE', "Localwood Socket Control"),
+            os.environ.get('PAGE_HEADING', "Socket Control"),
             os.environ.get('SOCKET_1_LABEL', "Socket 1"),
             os.environ.get('SOCKET_2_LABEL', "Socket 2"),
             os.environ.get('SOCKET_3_LABEL', "Socket 3"),
