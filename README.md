@@ -16,7 +16,9 @@ Adapted from: https://energenie4u.co.uk/res/pdfs/ENER314%20UM.pdf
 1. Run server with: `python3 localwood.py`
 2. Use web UI: http://localhost:8080
 
-You can customise the socket names in the web interface using these environment variables:
+Use environment variables to name each power socket. You can control up to 4 sockets.
+
+Unnamed sockets will be hidden from the UI.
 
 ```
 SOCKET_1_LABEL="Desk lamp"
@@ -25,7 +27,7 @@ SOCKET_3_LABEL="Fan"
 SOCKET_4_LABEL="Speakers"
 ```
 
-You can also customise the page's heading with `PAGE_HEADING` and the web browser's tab title with `PAGE_TITLE`
+You can optionally customise the page's heading with `PAGE_HEADING` and the web browser's tab title with `PAGE_TITLE`
 
 ## Recommendations
 
