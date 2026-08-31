@@ -1,136 +1,119 @@
-import os
-import web
-import RPi.GPIO as GPIO
-import time
-import socket_setup
 import logging
+import os
+import secrets
+import time
 
-logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+from flask import Flask, render_template, request
+import RPi.GPIO as GPIO
 
-auth_token = os.environ.get('AUTH_TOKEN')
+import socket_setup
+
+logging.basicConfig(format="%(levelname)s: %(message)s", level=logging.INFO)
+
+auth_token = os.environ.get("AUTH_TOKEN")
 
 if not auth_token:
     logging.warning("Proceeding without authentication")
 
-if not any(os.environ.get(key) for key in ['SOCKET_1_LABEL', 'SOCKET_2_LABEL', 'SOCKET_3_LABEL', 'SOCKET_4_LABEL']):
+if not any(
+    os.environ.get(key)
+    for key in [
+        "SOCKET_1_LABEL",
+        "SOCKET_2_LABEL",
+        "SOCKET_3_LABEL",
+        "SOCKET_4_LABEL",
+    ]
+):
     raise ValueError("No power sockets enabled, missing envs e.g. SOCKET_1_LABEL")
 
-urls = (
-    '/', 'homepage',
-    '/sockets', 'sockets'
-)
-render = web.template.render('templates/')
-app = web.application(urls, globals())
+app = Flask(__name__)
 
-def authenticate_user(params):
-    if auth_token:
-        if not hasattr(params, 'token'):
-            raise web.badrequest('Missing URL param "token"')
+# (D0, D1, D2, D3) on pins 13, 16, 15, 11 — ENER314 encoder codes
+DATA_PINS = (13, 16, 15, 11)
+MODULATOR_PIN = 22
+SOCKET_CODES = {
+    ("all", "on"): ((True, False, True, True), "1011 all sockets on"),
+    ("all", "off"): ((False, False, True, True), "0011 all sockets off"),
+    ("1", "on"): ((True, True, True, True), "1111 socket 1 on"),
+    ("1", "off"): ((False, True, True, True), "0111 socket 1 off"),
+    ("2", "on"): ((True, True, True, False), "1110 socket 2 on"),
+    ("2", "off"): ((False, True, True, False), "0110 socket 2 off"),
+    ("3", "on"): ((True, True, False, True), "1101 socket 3 on"),
+    ("3", "off"): ((False, True, False, True), "0101 socket 3 off"),
+    ("4", "on"): ((True, True, False, False), "1100 socket 4 on"),
+    ("4", "off"): ((False, True, False, False), "0100 socket 4 off"),
+}
 
-        if params.token != auth_token:
-            raise web.badrequest('Invalid auth token')
 
-class homepage:
-    def GET(self):
-        authenticate_user(web.input())
+def authenticate_user():
+    if not auth_token:
+        return None
 
-        return render.homepage(
-            os.environ.get('PAGE_TITLE', "Localwood Socket Control"),
-            os.environ.get('PAGE_HEADING', "Socket Control"),
-            os.environ.get('SOCKET_1_LABEL'),
-            os.environ.get('SOCKET_2_LABEL'),
-            os.environ.get('SOCKET_3_LABEL'),
-            os.environ.get('SOCKET_4_LABEL')
-        )
+    provided = request.values.get("token")
+    if provided is None:
+        return 'Missing URL param "token"', 400
 
-class sockets:
-    def POST(self):
-        params = web.input()
+    if len(provided) != len(auth_token) or not secrets.compare_digest(
+        provided, auth_token
+    ):
+        return "Invalid auth token", 400
 
-        authenticate_user(params)
+    return None
 
-        if not hasattr(params, 'socket'):
-            raise web.badrequest('Missing URL param "socket"')
 
-        if not hasattr(params, 'state'):
-            raise web.badrequest('Missing URL param "state"')
+@app.route("/")
+def homepage():
+    auth_error = authenticate_user()
+    if auth_error:
+        return auth_error
 
-        if params.socket == 'all' and params.state == 'on':
-            # See: https://energenie4u.co.uk/res/pdfs/ENER314%20UM.pdf
-            logging.info("Sending code 1011 all sockets on")
-            GPIO.output (13, True)
-            GPIO.output (16, False)
-            GPIO.output (15, True)
-            GPIO.output (11, True)
-        elif params.socket == 'all' and params.state == 'off':
-            logging.info("Sending code 0011 all sockets off")
-            GPIO.output (13, False)
-            GPIO.output (16, False)
-            GPIO.output (15, True)
-            GPIO.output (11, True)
-        elif params.socket == '1' and params.state == 'on':
-            logging.info("Sending code 1111 socket 1 on")
-            GPIO.output (13, True)
-            GPIO.output (16, True)
-            GPIO.output (15, True)
-            GPIO.output (11, True)
-        elif params.socket == '1' and params.state == 'off':
-            logging.info("Sending code 0111 socket 1 off")
-            GPIO.output (13, False)
-            GPIO.output (16, True)
-            GPIO.output (15, True)
-            GPIO.output (11, True)
-        elif params.socket == '2' and params.state == 'on':
-            logging.info("Sending code 1110 socket 2 on")
-            GPIO.output (13, True)
-            GPIO.output (16, True)
-            GPIO.output (15, True)
-            GPIO.output (11, False)
-        elif params.socket == '2' and params.state == 'off':
-            logging.info("Sending code 0110 socket 2 off")
-            GPIO.output (13, False)
-            GPIO.output (16, True)
-            GPIO.output (15, True)
-            GPIO.output (11, False)
-        elif params.socket == '3' and params.state == 'on':
-            logging.info("Sending code 1101 socket 3 on")
-            GPIO.output (13, True)
-            GPIO.output (16, True)
-            GPIO.output (15, False)
-            GPIO.output (11, True)
-        elif params.socket == '3' and params.state == 'off':
-            logging.info("Sending code 0101 socket 3 off")
-            GPIO.output (13, False)
-            GPIO.output (16, True)
-            GPIO.output (15, False)
-            GPIO.output (11, True)
-        elif params.socket == '4' and params.state == 'on':
-            logging.info("Sending code 1100 socket 4 on")
-            GPIO.output (13, True)
-            GPIO.output (16, True)
-            GPIO.output (15, False)
-            GPIO.output (11, False)
-        elif params.socket == '4' and params.state == 'off':
-            logging.info("Sending code 0100 socket 4 off")
-            GPIO.output (13, False)
-            GPIO.output (16, True)
-            GPIO.output (15, False)
-            GPIO.output (11, False)
-        else:
-            logging.info('Unknown combo socket=%s state=%s', params.socket, params.state)
-            raise web.badrequest('Socket or state invalid (expects socket: 1-4 state: on/off)')
+    return render_template(
+        "homepage.html",
+        page_title=os.environ.get("PAGE_TITLE", "Localwood Socket Control"),
+        page_heading=os.environ.get("PAGE_HEADING", "Socket Control"),
+        socket_1_label=os.environ.get("SOCKET_1_LABEL"),
+        socket_2_label=os.environ.get("SOCKET_2_LABEL"),
+        socket_3_label=os.environ.get("SOCKET_3_LABEL"),
+        socket_4_label=os.environ.get("SOCKET_4_LABEL"),
+    )
 
-        # let it settle, encoder requires this
-        time.sleep(0.1)
-        # Enable the modulator
-        GPIO.output (22, True)
-        # keep enabled for a period
-        time.sleep(1)
-        # Disable the modulator
-        GPIO.output (22, False)
 
-        return 'Done'
+@app.route("/sockets", methods=["POST"])
+def sockets():
+    auth_error = authenticate_user()
+    if auth_error:
+        return auth_error
+
+    if "socket" not in request.values:
+        return 'Missing URL param "socket"', 400
+
+    if "state" not in request.values:
+        return 'Missing URL param "state"', 400
+
+    socket = request.values["socket"]
+    state = request.values["state"]
+    code = SOCKET_CODES.get((socket, state))
+    if code is None:
+        logging.info("Unknown combo socket=%s state=%s", socket, state)
+        return "Socket or state invalid (expects socket: 1-4 state: on/off)", 400
+
+    bits, description = code
+    logging.info("Sending code %s", description)
+    for pin, value in zip(DATA_PINS, bits):
+        GPIO.output(pin, value)
+
+    # let it settle, encoder requires this
+    time.sleep(0.1)
+    # Enable the modulator
+    GPIO.output(MODULATOR_PIN, True)
+    # keep enabled for a period
+    time.sleep(1)
+    # Disable the modulator
+    GPIO.output(MODULATOR_PIN, False)
+
+    return "Done"
+
 
 if __name__ == "__main__":
     socket_setup.setup()
-    app.run()
+    app.run(host="0.0.0.0", port=8080)

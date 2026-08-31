@@ -1,52 +1,55 @@
-$def with (page_title, page_heading, socket_1_label, socket_2_label, socket_3_label, socket_4_label)
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>$page_title</title>
+    <title>{{ page_title }}</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="stylesheet" href="static/bootstrap.min.css" />
-    <link rel="stylesheet" href="static/styles.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
   </head>
   <body>
       <div class="container">
-      <h1>$page_heading</h1>
+      <h1>{{ page_heading }}</h1>
 
       <h4>All Sockets</h4>
       <div class="btn-group btn-group-lg text-center" role="group" aria-label="All sockets control">
         <button type="button" class="btn btn-light" socket="all" state="on">On</button>
         <button type="button" class="btn btn-light" socket="all" state="off">Off</button>
       </div>
-      $if socket_1_label:
-          <h4>$socket_1_label</h4>
-          <div class="btn-group btn-group-lg" role="group" aria-label="$socket_1_label">
+      {% if socket_1_label %}
+          <h4>{{ socket_1_label }}</h4>
+          <div class="btn-group btn-group-lg" role="group" aria-label="{{ socket_1_label }}">
             <button type="button" class="btn btn-light" socket="1" state="on">On</button>
             <button type="button" class="btn btn-light" socket="1" state="off">Off</button>
           </div>
-      $if socket_2_label:
-          <h4>$socket_2_label</h4>
-          <div class="btn-group btn-group-lg" role="group" aria-label="$socket_2_label">
+      {% endif %}
+      {% if socket_2_label %}
+          <h4>{{ socket_2_label }}</h4>
+          <div class="btn-group btn-group-lg" role="group" aria-label="{{ socket_2_label }}">
             <button type="button" class="btn btn-light" socket="2" state="on">On</button>
             <button type="button" class="btn btn-light" socket="2" state="off">Off</button>
           </div>
-      $if socket_3_label:
-          <h4>$socket_3_label</h4>
-          <div class="btn-group btn-group-lg" role="group" aria-label="$socket_3_label">
+      {% endif %}
+      {% if socket_3_label %}
+          <h4>{{ socket_3_label }}</h4>
+          <div class="btn-group btn-group-lg" role="group" aria-label="{{ socket_3_label }}">
             <button type="button" class="btn btn-light" socket="3" state="on">On</button>
             <button type="button" class="btn btn-light" socket="3" state="off">Off</button>
           </div>
-      $if socket_4_label:
-          <h4>$socket_4_label</h4>
-          <div class="btn-group btn-group-lg" role="group" aria-label="$socket_4_label">
+      {% endif %}
+      {% if socket_4_label %}
+          <h4>{{ socket_4_label }}</h4>
+          <div class="btn-group btn-group-lg" role="group" aria-label="{{ socket_4_label }}">
             <button type="button" class="btn btn-light" socket="4" state="on">On</button>
             <button type="button" class="btn btn-light" socket="4" state="off">Off</button>
           </div>
+      {% endif %}
 
       <h5>Status</h5>
       <div id="status"></div>
     </div>
 
-    <script src="static/scripts.js" type="text/javascript"></script>
+    <script src="{{ url_for('static', filename='scripts.js') }}" type="text/javascript"></script>
   </body>
 </html>

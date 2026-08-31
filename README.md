@@ -9,12 +9,14 @@ Adapted from: https://energenie4u.co.uk/res/pdfs/ENER314%20UM.pdf
 - Python 3
 - Raspberry Pi (I used a Zero W)
 - [Energenie Pi-mote control board](https://energenie4u.co.uk/catalogue/product/ENER314)
-- Web.py `pip3 install -r requirements.txt`
+- Flask and [rpi-lgpio](https://pypi.org/project/rpi-lgpio/) (a Bookworm-compatible `RPi.GPIO` shim): `pip3 install -r requirements.txt`
 
 ## Usage
 
 1. Run server with: `python3 localwood.py`
 2. Use web UI: http://localhost:8080
+
+The server listens on `0.0.0.0:8080` so other devices on the LAN (MQTT/IFTTT adaptors, phones) can reach it.
 
 Use environment variables to name each power socket. You can control up to 4 sockets.
 
@@ -27,7 +29,21 @@ SOCKET_3_LABEL="Fan"
 SOCKET_4_LABEL="Speakers"
 ```
 
-You can optionally customise the page's heading with `PAGE_HEADING` and the web browser's tab title with `PAGE_TITLE`
+You can optionally customise the page's heading with `PAGE_HEADING` and the web browser's tab title with `PAGE_TITLE`.
+
+### Authentication
+
+Set `AUTH_TOKEN` to require a matching `token` query parameter on every request. If `AUTH_TOKEN` is unset, the UI and API are open. When it is set, a missing or invalid token returns HTTP 400.
+
+### API
+
+Turn sockets on or off with:
+
+```
+POST /sockets?socket=<1-4|all>&state=<on|off>
+```
+
+Include `&token=...` when `AUTH_TOKEN` is set. A successful request returns the plain text `Done`. Query string or form body both work.
 
 ## Recommendations
 

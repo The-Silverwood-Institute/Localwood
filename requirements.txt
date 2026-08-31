@@ -1,1 +1,2 @@
-web.py==0.62
+Flask==3.1.2
+rpi-lgpio==0.6
